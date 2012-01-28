@@ -7,42 +7,48 @@
                 padding-top: 10px;
                 padding-bottom: 10px;
             }
-            textarea{
+            textarea {
                 margin-top: 0px;
                 margin-bottom: 5px;
-                height: 251px;
+                height: 287px;
                 resize: none;
             }
-       </style>
+            button{
+                width: 100%;
+            }
+        </style>
     </head>
     <div class="span16 page-header">
         <h1>Flash vs HTML5</h1>
     </div>
-    <br/>
     <div class="row">
         <div class="span9">
-            <div class="row">
-                <div class="span9 media-grid">
-                    <div style="padding: 10px;width: 500px;height: 500px;" class="well">
-                        <canvas height="500" width="500" id="canvas"></canvas>
+            <div>
+                <div style="padding: 10px;width: 500px;height: 500px;" class="well">
+                    <canvas height="500" width="500" id="canvas"></canvas>
+                </div>
+            </div>
+            <div class="lift:ChooseYourSide">
+                <div class="row">
+                    <div class="span3" style="padding-top: 10px"><span class="label">choose your side :</span></div>
+                    <div class="span3">
+                        <button id="chooseSideAButton" class="btn large danger">I love Flash !</button>
+                    </div>
+                    <div class="span3">
+                        <button id="chooseSideBButton" class="btn large primary">I love HTML5 !</button>
                     </div>
                 </div>
             </div>
-            <div style="text-align: center;" class="lift:ChooseYourSide span9">
-                <p><span class="label">choose your side :</span></p>
-                <button id="chooseSideAButton" class="btn large danger" style="width: 250px; margin-right: 8px; margin-top: 10px;">I love Flash !</button>
-                <button id="chooseSideBButton" class="btn large primary" style="width: 250px; margin-left: 8px;">I love HTML5 !</button>
-            </div>
         </div>
         <div class="span7">
-            <h2 class="span7">Live stats</h2>
+            <h2>Live stats</h2>
             <div class="alert-message block-message info lift:comet?type=PushAvsBGameStats">
                 <p>total score : <span id="totalScore">4656</span></p>
                 <p>flash score : <span id="sideAScore">4656</span></p>
                 <p>html5 score : <span id="sideBScore">4656</span></p>
                 <p>connected users : <span id="connectedUsers">4656</span></p>
             </div>
-            <h2 class="span16">Chat</h2>
+            <h2>Chat</h2>
             <div class="lift:comet?type=PushMicroChatLastMessage">
                 <textarea class="span7" id="microChatHistory"></textarea>
             </div>
