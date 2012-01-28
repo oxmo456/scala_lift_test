@@ -5,7 +5,7 @@ import http._
 import eu.badmood.avsbgame.{AvsBGame}
 import xml.Text
 
-class PushAvsBGameCellChange extends CometListener {
+class PushAvsBGameCellChange extends CometActor with CometListener {
 
   override protected def registerWith = AvsBGame
 
