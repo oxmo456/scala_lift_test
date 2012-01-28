@@ -1,0 +1,66 @@
+<lift:surround with="default" at="content">
+    <head>
+        <script src="static/easel.js"></script>
+        <script src="static/avsbgame.js"></script>
+        <style type="text/css">
+            body {
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+            textarea{
+                margin-top: 0px;
+                margin-bottom: 5px;
+                height: 251px;
+                resize: none;
+            }
+       </style>
+    </head>
+    <div class="row">
+        <div class="span16 page-header">
+            <h1>Flash vs HTML5</h1>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="span9">
+            <div class="row">
+                <div class="span9 media-grid">
+                    <div style="padding: 10px;width: 500px;height: 500px;" class="well">
+                        <canvas height="500" width="500" id="canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center;" class="lift:ChooseYourSide span9">
+                <p><span class="label">choose your side :</span></p>
+                <button id="chooseSideAButton" class="btn large danger" style="width: 250px; margin-right: 8px; margin-top: 10px;">I love Flash !</button>
+                <button id="chooseSideBButton" class="btn large primary" style="width: 250px; margin-left: 8px;">I love HTML5 !</button>
+            </div>
+        </div>
+        <div class="span7">
+            <h2 class="span7">Live stats</h2>
+            <div class="alert-message block-message info">
+                <p>total score : <span>4656</span></p>
+                <p>flash score : <span>4656</span></p>
+                <p>html5 score : <span>4656</span></p>
+                <p>connected flash players : <span>1002</span></p>
+                <p>connected html5 players : <span>1002</span></p>
+                <p>connected users : <span>1002</span></p>
+            </div>
+            <h2 class="span16">Chat</h2>
+            <div class="lift:comet?type=PushMicroChatLastMessage">
+                <textarea class="span7" id="microChatHistory"></textarea>
+            </div>
+            <form class="lift:form.ajax">
+                <div class="lift:MicroChatInput">
+                    <input class="span5" name="microChatInput" id="microChatInput" size="30" type="text"/>
+                    <input type="submit" class="btn" style="width: 116px">send</input>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <tail>
+        <span class="lift:InitJsGameEngine"></span>
+        <span class="lift:comet?type=PushAvsBGameCellChange"></span>
+    </tail>
+</lift:surround>
