@@ -1,0 +1,5 @@
+move into the project directory : $ cd test_014
+launch sbt                      : $ ./sbt
+update dependencies             : > update
+compile project                 : > compile
+start container                 : > container:start
