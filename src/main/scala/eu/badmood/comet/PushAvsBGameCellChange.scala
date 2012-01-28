@@ -7,6 +7,7 @@ import xml.Text
 
 class PushAvsBGameCellChange extends CometActor with CometListener {
 
+
   override protected def registerWith = AvsBGame
 
   def render = "*" #> Text("")

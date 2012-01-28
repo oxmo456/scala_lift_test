@@ -9,6 +9,7 @@ import net.liftweb.http.js.JE._
 import net.liftweb.http.{ListenerManager, SessionVar}
 
 import eu.badmood.LiftUtils
+import eu.badmood.avsbgame.AvsBGameStats.IncreaseTotalScore
 
 
 object AvsBGame extends LiftActor with ListenerManager {
@@ -45,10 +46,10 @@ object AvsBGame extends LiftActor with ListenerManager {
       if (currentPlayerSide != grid(cellIndex)) {
         grid(cellIndex) = currentPlayerSide
         updateListeners(CellChange(cellIndex, currentPlayerSide))
+        AvsBGameStats ! IncreaseTotalScore(currentPlayerSide)
         true
       } else false
   }
-
 
   object Js {
 

@@ -15,10 +15,8 @@
             }
        </style>
     </head>
-    <div class="row">
-        <div class="span16 page-header">
-            <h1>Flash vs HTML5</h1>
-        </div>
+    <div class="span16 page-header">
+        <h1>Flash vs HTML5</h1>
     </div>
     <br/>
     <div class="row">
@@ -38,13 +36,11 @@
         </div>
         <div class="span7">
             <h2 class="span7">Live stats</h2>
-            <div class="alert-message block-message info">
-                <p>total score : <span>4656</span></p>
-                <p>flash score : <span>4656</span></p>
-                <p>html5 score : <span>4656</span></p>
-                <p>connected flash players : <span>1002</span></p>
-                <p>connected html5 players : <span>1002</span></p>
-                <p>connected users : <span>1002</span></p>
+            <div class="alert-message block-message info lift:comet?type=PushAvsBGameStats">
+                <p>total score : <span id="totalScore">4656</span></p>
+                <p>flash score : <span id="sideAScore">4656</span></p>
+                <p>html5 score : <span id="sideBScore">4656</span></p>
+                <p>connected users : <span id="connectedUsers">4656</span></p>
             </div>
             <h2 class="span16">Chat</h2>
             <div class="lift:comet?type=PushMicroChatLastMessage">
@@ -62,5 +58,6 @@
     <tail>
         <span class="lift:InitJsGameEngine"></span>
         <span class="lift:comet?type=PushAvsBGameCellChange"></span>
+        <span class="lift:comet?type=WatchConnectedUsers"></span>
     </tail>
 </lift:surround>
