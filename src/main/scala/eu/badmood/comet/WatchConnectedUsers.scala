@@ -8,13 +8,13 @@ import eu.badmood.avsbgame.AvsBGameStats.{UserConnected, UserDisconnected}
 class WatchConnectedUsers extends CometActor{
 
   override def localSetup(){
-    super.localSetup()
     AvsBGameStats ! UserConnected()
+    super.localSetup()
   }
 
   override def localShutdown(){
-    super.localShutdown()
     AvsBGameStats !  UserDisconnected()
+    super.localShutdown()
   }
 
   def render = "*" #> Text("")
