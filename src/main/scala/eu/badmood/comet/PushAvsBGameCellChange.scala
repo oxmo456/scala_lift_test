@@ -4,11 +4,11 @@ import net.liftweb._
 import http._
 import eu.badmood.avsbgame.{AvsBGame}
 import xml.Text
+import eu.badmood.LiftUtils.MessageListener
 
-class PushAvsBGameCellChange extends CometActor with CometListener {
+class PushAvsBGameCellChange extends CometActor with MessageListener {
 
-
-  override protected def registerWith = AvsBGame
+  override def cometActorMessageDispatcher = AvsBGame
 
   def render = "*" #> Text("")
 

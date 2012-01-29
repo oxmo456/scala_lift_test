@@ -13,9 +13,10 @@ import net.liftweb.json._
 import eu.badmood.LiftUtils
 import eu.badmood.avsbgame.AvsBGameStats.IncreaseTotalScore
 import math.BigInt._
+import eu.badmood.LiftUtils.MessageDispatcher
 
 
-object AvsBGame extends LiftActor with ListenerManager {
+object AvsBGame extends MessageDispatcher {
 
   class Side(val value: Int);
 
@@ -31,12 +32,9 @@ object AvsBGame extends LiftActor with ListenerManager {
 
   case class CellChange(cellIndex: Int, side: Side)
 
-  override protected def createUpdate: Any = ()
-
   private val size = 6 * 6
 
   private val grid = ArrayBuffer[Side](ArrayBuffer.fill(size)(SideA()): _*)
-
 
   def getGrid = grid.clone()
 
@@ -48,7 +46,7 @@ object AvsBGame extends LiftActor with ListenerManager {
     val currentPlayerSide = currentPlayer.side
     if (currentPlayerSide != grid(cellIndex)) {
       grid(cellIndex) = currentPlayerSide
-      updateListeners(CellChange(cellIndex, currentPlayerSide))
+      dispatch(CellChange(cellIndex, currentPlayerSide))
       AvsBGameStats ! IncreaseTotalScore(currentPlayerSide)
       true
     } else false
