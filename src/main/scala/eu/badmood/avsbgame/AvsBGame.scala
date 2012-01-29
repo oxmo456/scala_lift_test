@@ -66,7 +66,7 @@ object AvsBGame extends LiftActor with ListenerManager {
     def cellClickHandler = {
       LiftUtils.ajaxFunction1(cellClickHandlerFuncName, (data: Any) => {
         data match {
-          case cellIndex: Double if cellIndexIsValid(cellIndex.toInt) => changeCellSide(cellIndex.toInt)//AvsBGame ! ChangeCellSide(cellIndex.toInt, currentPlayer.side)
+          case cellIndex: Double if cellIndexIsValid(cellIndex.toInt) => changeCellSide(cellIndex.toInt)
           case _ => ()
         }
         Noop
