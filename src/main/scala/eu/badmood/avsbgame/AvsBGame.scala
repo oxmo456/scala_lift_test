@@ -8,8 +8,11 @@ import net.liftweb.http.js.JsCmds._
 import net.liftweb.http.js.JE._
 import net.liftweb.http.{ListenerManager, SessionVar}
 
+import net.liftweb.json._
+
 import eu.badmood.LiftUtils
 import eu.badmood.avsbgame.AvsBGameStats.IncreaseTotalScore
+import math.BigInt._
 
 
 object AvsBGame extends LiftActor with ListenerManager {
@@ -41,14 +44,14 @@ object AvsBGame extends LiftActor with ListenerManager {
     cellIndex >= 0 && cellIndex < size
   }
 
-  private def changeCellSide(cellIndex : Int) : Boolean = {
-      val currentPlayerSide = currentPlayer.side
-      if (currentPlayerSide != grid(cellIndex)) {
-        grid(cellIndex) = currentPlayerSide
-        updateListeners(CellChange(cellIndex, currentPlayerSide))
-        AvsBGameStats ! IncreaseTotalScore(currentPlayerSide)
-        true
-      } else false
+  private def changeCellSide(cellIndex: Int): Boolean = {
+    val currentPlayerSide = currentPlayer.side
+    if (currentPlayerSide != grid(cellIndex)) {
+      grid(cellIndex) = currentPlayerSide
+      updateListeners(CellChange(cellIndex, currentPlayerSide))
+      AvsBGameStats ! IncreaseTotalScore(currentPlayerSide)
+      true
+    } else false
   }
 
   object Js {
@@ -61,7 +64,10 @@ object AvsBGame extends LiftActor with ListenerManager {
     val setPlayerSideFuncName = "setPlayerSide"
     val cellChangeFuncName = "updateCell"
 
-    def gameData = "[" + grid.map(_.value).mkString(",") + "]"
+    def gameData = {
+      val data = JArray(grid.map(side => JInt(side.value)).toList)
+      compact(render(data))
+    }
 
     def cellClickHandler = {
       LiftUtils.ajaxFunction1(cellClickHandlerFuncName, (data: Any) => {
