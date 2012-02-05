@@ -3,16 +3,16 @@ package eu.badmood.avsbgame
 
 import collection.mutable.ArrayBuffer
 
+import net.liftweb.actor._
+import net.liftweb.http._
 import net.liftweb.http.js.JsCmds._
 import net.liftweb.http.js.JE._
 
 import net.liftweb.json._
 
 import eu.badmood.LiftUtils
-import eu.badmood.avsbgame.AvsBGameStats.ScoresChanged
+import eu.badmood.avsbgame.AvsBGameStats.ScoresChange
 import math.BigInt._
-import net.liftweb.actor.LiftActor
-import net.liftweb.http.{ListenerManager, SessionVar}
 
 
 object AvsBGame extends LiftActor with ListenerManager {
@@ -45,48 +45,37 @@ object AvsBGame extends LiftActor with ListenerManager {
     cellIndex >= 0 && cellIndex < size
   }
 
+  private def updateScores(currentPlayerSide : Side){
+    grid.foldLeft[Int](0) {
+      (sum, side) => sum + side.value
+    } match {
+      case x if x == size => Scores.sideAScore += 100
+      case x if x == 0 => Scores.sideBScore += 100
+      case _ => currentPlayerSide match {
+        case SideA() => Scores.sideAScore += 1
+        case SideB() => Scores.sideBScore += 1
+      }
+    }
+  }
+
   override def lowPriority = {
-    case ChangeCellSide(currentPlayerSide, cellIndex) => {
-
-
-
-      if (currentPlayerSide != grid(cellIndex)) {
+    case ChangeCellSide(currentPlayerSide, cellIndex) if cellIndexIsValid(cellIndex) && currentPlayerSide != grid(cellIndex) => {
         grid(cellIndex) = currentPlayerSide
-
-        grid.foldLeft[Int](0) {
-          (sum, side) => sum + side.value
-        } match {
-          case x if x == size => Score.sideAScore += 100
-          case x if x == 0 => Score.sideBScore += 100
-          case _ => currentPlayerSide match {
-            case SideA() => Score.sideAScore += 1
-            case SideB() => Score.sideBScore += 1
-          }
-        }
-
-        AvsBGameStats ! ScoresChanged(Score.totalScore, Score.sideAScore, Score.sideBScore)
-
+        updateScores(currentPlayerSide)
         updateListeners(CellChange(cellIndex, currentPlayerSide))
-        true
-      } else false
-
-
+        AvsBGameStats ! ScoresChange(Scores.totalScore, Scores.sideAScore, Scores.sideBScore)
     }
   }
 
 
-  private object Score {
-
+  private object Scores {
     var sideAScore = 0;
     var sideBScore = 0;
-
     def totalScore = sideAScore + sideBScore;
-
   }
 
 
   object Js {
-
     val gameVarName = "game"
     val spriteSheetURL = "images/html5vsflash.png"
     val spriteSheetWidth = "1000"
@@ -128,7 +117,6 @@ object AvsBGame extends LiftActor with ListenerManager {
     def cellChange(cellIndex: Int, side: Side) = {
       JsRaw("""%1s.%2s(%3s,%4s)""".format(gameVarName, cellChangeFuncName, cellIndex.toString, side.value.toString)).cmd
     }
-
 
   }
 
