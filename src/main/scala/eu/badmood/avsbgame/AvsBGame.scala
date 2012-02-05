@@ -5,17 +5,17 @@ import collection.mutable.ArrayBuffer
 
 import net.liftweb.http.js.JsCmds._
 import net.liftweb.http.js.JE._
-import net.liftweb.http.{SessionVar}
 
 import net.liftweb.json._
 
 import eu.badmood.LiftUtils
 import eu.badmood.avsbgame.AvsBGameStats.ScoresChanged
 import math.BigInt._
-import eu.badmood.LiftUtils.MessageDispatcher
+import net.liftweb.actor.LiftActor
+import net.liftweb.http.{ListenerManager, SessionVar}
 
 
-object AvsBGame extends MessageDispatcher {
+object AvsBGame extends LiftActor with ListenerManager {
 
   class Side(val value: Int);
 
@@ -27,6 +27,8 @@ object AvsBGame extends MessageDispatcher {
 
   case class Player(var side: Side)
 
+  case class ChangeCellSide(currentPlayerSide: Side, cellIndex: Int)
+
   object currentPlayer extends SessionVar[Player](Player(NoSide()))
 
   case class CellChange(cellIndex: Int, side: Side)
@@ -37,29 +39,41 @@ object AvsBGame extends MessageDispatcher {
 
   def getGrid = grid.clone()
 
+  override protected def createUpdate = ()
+
   def cellIndexIsValid(cellIndex: Int): Boolean = {
     cellIndex >= 0 && cellIndex < size
   }
 
-  private def changeCellSide(cellIndex: Int): Boolean = {
-    val currentPlayerSide = currentPlayer.side
-    if (currentPlayerSide != grid(cellIndex)) {
-      grid(cellIndex) = currentPlayerSide
-      grid.foldLeft[Int](0) {
-        (sum, side) => sum + side.value
-      } match {
-        case x if x == size => Score.sideAScore += 100
-        case x if x == 0 => Score.sideBScore += 100
-        case _ => currentPlayerSide match {
-          case SideA() => Score.sideAScore += 1
-          case SideB() => Score.sideBScore += 1
+  override def lowPriority = {
+    case ChangeCellSide(currentPlayerSide, cellIndex) => {
+
+
+
+      if (currentPlayerSide != grid(cellIndex)) {
+        grid(cellIndex) = currentPlayerSide
+
+        grid.foldLeft[Int](0) {
+          (sum, side) => sum + side.value
+        } match {
+          case x if x == size => Score.sideAScore += 100
+          case x if x == 0 => Score.sideBScore += 100
+          case _ => currentPlayerSide match {
+            case SideA() => Score.sideAScore += 1
+            case SideB() => Score.sideBScore += 1
+          }
         }
-      }
-      AvsBGameStats ! ScoresChanged(Score.totalScore, Score.sideAScore, Score.sideBScore)
-      dispatch(CellChange(cellIndex, currentPlayer.side))
-      true
-    } else false
+
+        AvsBGameStats ! ScoresChanged(Score.totalScore, Score.sideAScore, Score.sideBScore)
+
+        updateListeners(CellChange(cellIndex, currentPlayerSide))
+        true
+      } else false
+
+
+    }
   }
+
 
   private object Score {
 
@@ -89,7 +103,7 @@ object AvsBGame extends MessageDispatcher {
     def cellClickHandler = {
       LiftUtils.ajaxFunction1(cellClickHandlerFuncName, (data: Any) => {
         data match {
-          case cellIndex: Double => if (cellIndexIsValid(cellIndex.toInt)) changeCellSide(cellIndex.toInt)
+          case cellIndex: Double => AvsBGame ! ChangeCellSide(currentPlayer.side, cellIndex.toInt)
           case _ => ()
         }
         Noop
