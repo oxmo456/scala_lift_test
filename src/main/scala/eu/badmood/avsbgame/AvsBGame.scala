@@ -126,7 +126,7 @@ object AvsBGame extends LiftActor with ListenerManager {
     }
 
     def cellChange(cellIndex: Int, side: Side) = {
-      JsRaw("""%1s.%2s(%3s,%4s);""".format(gameVarName, cellChangeFuncName, cellIndex.toString, side.value.toString)).cmd
+      JsRaw("""%1s.%2s(%3s,%4s)""".format(gameVarName, cellChangeFuncName, cellIndex.toString, side.value.toString)).cmd
     }
 
 
