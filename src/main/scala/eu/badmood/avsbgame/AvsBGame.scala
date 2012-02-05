@@ -3,10 +3,9 @@ package eu.badmood.avsbgame
 
 import collection.mutable.ArrayBuffer
 
-import net.liftweb.actor.LiftActor
 import net.liftweb.http.js.JsCmds._
 import net.liftweb.http.js.JE._
-import net.liftweb.http.{ListenerManager, SessionVar}
+import net.liftweb.http.{SessionVar}
 
 import net.liftweb.json._
 
