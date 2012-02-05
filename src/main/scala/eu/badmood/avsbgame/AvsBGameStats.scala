@@ -6,7 +6,7 @@ import eu.badmood.avsbgame.AvsBGame.{SideB, SideA, Side}
 
 object AvsBGameStats extends LiftActor with ListenerManager {
 
-  case class IncreaseTotalScore(side:Side)
+  case class ScoresChanged(totalScore:Int,sideAScore:Int, sideBScore:Int)
   case class StatsChange()
   case class UserConnected()
   case class UserDisconnected()
@@ -22,12 +22,10 @@ object AvsBGameStats extends LiftActor with ListenerManager {
   override protected def createUpdate: Any = ()
 
   override def lowPriority = {
-    case IncreaseTotalScore(side) => {
-      totalScore += 1
-      side match {
-        case SideA() => sideAScore += 1
-        case SideB() => sideBScore += 1
-      }
+    case ScoresChanged(totalScore,sideAScore,sideBScore) => {
+      this.totalScore = totalScore
+      this.sideAScore = sideAScore
+      this.sideBScore = sideBScore
       updateListeners(StatsChange())
     }
     case UserConnected() => {

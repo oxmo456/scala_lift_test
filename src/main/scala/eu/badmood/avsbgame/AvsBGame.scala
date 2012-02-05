@@ -10,7 +10,7 @@ import net.liftweb.http.{SessionVar}
 import net.liftweb.json._
 
 import eu.badmood.LiftUtils
-import eu.badmood.avsbgame.AvsBGameStats.IncreaseTotalScore
+import eu.badmood.avsbgame.AvsBGameStats.ScoresChanged
 import math.BigInt._
 import eu.badmood.LiftUtils.MessageDispatcher
 
@@ -45,11 +45,31 @@ object AvsBGame extends MessageDispatcher {
     val currentPlayerSide = currentPlayer.side
     if (currentPlayerSide != grid(cellIndex)) {
       grid(cellIndex) = currentPlayerSide
-      dispatch(CellChange(cellIndex, currentPlayerSide))
-      AvsBGameStats ! IncreaseTotalScore(currentPlayerSide)
+      grid.foldLeft[Int](0) {
+        (sum, side) => sum + side.value
+      } match {
+        case x if x == size => Score.sideAScore += 100
+        case x if x == 0 => Score.sideBScore += 100
+        case _ => currentPlayerSide match {
+          case SideA() => Score.sideAScore += 1
+          case SideB() => Score.sideBScore += 1
+        }
+      }
+      AvsBGameStats ! ScoresChanged(Score.totalScore, Score.sideAScore, Score.sideBScore)
+      dispatch(CellChange(cellIndex, currentPlayer.side))
       true
     } else false
   }
+
+  private object Score {
+
+    var sideAScore = 0;
+    var sideBScore = 0;
+
+    def totalScore = sideAScore + sideBScore;
+
+  }
+
 
   object Js {
 
@@ -69,7 +89,7 @@ object AvsBGame extends MessageDispatcher {
     def cellClickHandler = {
       LiftUtils.ajaxFunction1(cellClickHandlerFuncName, (data: Any) => {
         data match {
-          case cellIndex: Double => if(cellIndexIsValid(cellIndex.toInt)) changeCellSide(cellIndex.toInt)
+          case cellIndex: Double => if (cellIndexIsValid(cellIndex.toInt)) changeCellSide(cellIndex.toInt)
           case _ => ()
         }
         Noop
