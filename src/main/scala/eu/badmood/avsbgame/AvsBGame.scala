@@ -32,7 +32,7 @@ object AvsBGame extends MessageDispatcher {
 
   case class CellChange(cellIndex: Int, side: Side)
 
-  private val size = 6 * 6
+  private val size = 10 * 10
 
   private val grid = ArrayBuffer[Side](ArrayBuffer.fill(size)(SideA()): _*)
 
