@@ -59,7 +59,7 @@ object AvsBGame extends LiftActor with ListenerManager {
     }
   }
 
-  override def lowPriority = {
+  override protected def lowPriority = {
     case ChangeCellSide(currentPlayerSide, cellIndex) if cellIndexIsValid(cellIndex) && currentPlayerSide != grid(cellIndex) => {
         grid(cellIndex) = currentPlayerSide
         updateScores(currentPlayerSide)
