@@ -11,13 +11,20 @@ object AvsBGameStats extends LiftActor with ListenerManager {
   case class UserConnected()
   case class UserDisconnected()
 
+  @volatile
   private var totalScore = 0
 
+  @volatile
   private var sideAScore = 0
 
+  @volatile
   private var sideBScore = 0
 
+  @volatile
   private var connectedUsers = 0
+
+  @volatile
+  private var maxConnectedUsers = 0;
 
   override protected def createUpdate: Any = ()
 
@@ -30,6 +37,7 @@ object AvsBGameStats extends LiftActor with ListenerManager {
     }
     case UserConnected() => {
       connectedUsers += 1
+      maxConnectedUsers = math.max(connectedUsers,maxConnectedUsers);
       updateListeners(StatsChange())
     }
     case UserDisconnected() => {
@@ -45,4 +53,6 @@ object AvsBGameStats extends LiftActor with ListenerManager {
   def getSideBScore = sideBScore
 
   def getConnectedUsers = connectedUsers
+
+  def getMaxConnectedUsers = maxConnectedUsers
 }
