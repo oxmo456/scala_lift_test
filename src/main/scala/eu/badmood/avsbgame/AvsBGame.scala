@@ -35,13 +35,14 @@ object AvsBGame extends LiftActor with ListenerManager {
 
   private val size = 10 * 10
 
+
   private val grid = ArrayBuffer[Side](ArrayBuffer.fill(size)(SideA()): _*)
 
   def getGrid = grid.clone()
 
   override protected def createUpdate = ()
 
-  def cellIndexIsValid(cellIndex: Int): Boolean = {
+  private def cellIndexIsValid(cellIndex: Int): Boolean = {
     cellIndex >= 0 && cellIndex < size
   }
 
