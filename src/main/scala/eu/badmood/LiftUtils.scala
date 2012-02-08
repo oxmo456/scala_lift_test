@@ -7,7 +7,7 @@ import net.liftweb.http.{CometActor, SHtml}
 object LiftUtils {
 
   def ajaxFunction1(functionName: String, func: (Any) => JsCmd) = {
-    JsRaw("""function %1s(a){console.log(a);%2s}""".format(functionName, SHtml.jsonCall(JsRaw("a"), func)._2.toJsCmd))
+    JsRaw("""function %1s(a){%2s}""".format(functionName, SHtml.jsonCall(JsRaw("a"), func)._2.toJsCmd))
   }
 
   def jQueryAttr(id: String, attribute: String, value: JsExp) = {
