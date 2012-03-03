@@ -3,3 +3,4 @@ launch sbt                      : $ ./sbt
 update dependencies             : > update
 compile project                 : > compile
 start container                 : > container:start
+play                            : open your browser http://127.0.0.1:8080
