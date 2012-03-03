@@ -2,7 +2,7 @@ package eu.badmood.comet
 
 import net.liftweb.http.{CometListener, CometActor}
 import eu.badmood.avsbgame.AvsBGameStats
-import eu.badmood.avsbgame.AvsBGameStats.StatsChange
+import eu.badmood.avsbgame.AvsBGameStats.Stats
 import net.liftweb.http.js.JsCmds.SetHtml
 import xml.Text
 
@@ -11,22 +11,25 @@ class PushAvsBGameStats extends CometActor with CometListener {
   def registerWith = AvsBGameStats
 
   def render = {
-    "#totalScore *" #> Text(AvsBGameStats.getTotalScore.toString) &
-      "#sideAScore *" #> Text(AvsBGameStats.getSideAScore.toString) &
-      "#sideBScore *" #> Text(AvsBGameStats.getSideBScore.toString) &
-      "#connectedUsers *" #> Text(AvsBGameStats.getConnectedUsers.toString) &
-      "#maxConnectedUsers *" #> Text(AvsBGameStats.getMaxConnectedUsers.toString)
+    println("RENDER !")
+    val pending = "..."
+    "#totalScore *" #> Text(pending) &
+      "#sideAScore *" #> Text(pending) &
+      "#sideBScore *" #> Text(pending) &
+      "#connectedUsers *" #> Text(pending) &
+      "#maxConnectedUsers *" #> Text(pending)
   }
 
   override def lowPriority = {
-    case StatsChange() => {
+    case Stats(totalScrore, sideAScore,sideBScore,connectedUsers,maxConnectedUsers) => {
       partialUpdate {
-        SetHtml("#totalScore", Text(AvsBGameStats.getTotalScore.toString)) &
-          SetHtml("#sideAScore", Text(AvsBGameStats.getSideAScore.toString)) &
-          SetHtml("#sideBScore", Text(AvsBGameStats.getSideBScore.toString)) &
-          SetHtml("#connectedUsers", Text(AvsBGameStats.getConnectedUsers.toString)) &
-          SetHtml("#maxConnectedUsers", Text(AvsBGameStats.getMaxConnectedUsers.toString))
+        SetHtml("#totalScore", Text(totalScrore.toString)) &
+          SetHtml("#sideAScore", Text(sideBScore.toString)) &
+          SetHtml("#sideBScore", Text(sideBScore.toString)) &
+          SetHtml("#connectedUsers", Text(connectedUsers.toString)) &
+          SetHtml("#maxConnectedUsers", Text(maxConnectedUsers.toString))
       }
     }
+    case () => println("INIT !")//listener init
   }
 }
