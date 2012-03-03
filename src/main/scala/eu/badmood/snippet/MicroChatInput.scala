@@ -5,7 +5,7 @@ import eu.badmood.avsbgame.MicroChat
 import net.liftweb.http.js.JsCmds.{SetValById}
 import net.liftweb.http.{DispatchSnippet, SHtml}
 
-class MicroChatInput extends DispatchSnippet{
+object MicroChatInput extends DispatchSnippet{
 
   def dispatch = {
     case "render" => render
