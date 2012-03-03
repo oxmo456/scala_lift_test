@@ -8,7 +8,7 @@ import eu.badmood.avsbgame.AvsBGame._
 import Js._
 import net.liftweb.http.{DispatchSnippet, SHtml}
 
-class ChooseYourSide extends DispatchSnippet{
+object ChooseYourSide extends DispatchSnippet{
 
   def dispatch = {
     case "render" => render
