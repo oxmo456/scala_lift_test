@@ -76,7 +76,7 @@ var AvsBGame = function(spriteSheetURL, spriteSheetWidth, spriteSheetHeight, dat
 
     function buildDisabledCellIndicator() {
         var g = new Graphics();
-        g.beginFill(Graphics.getRGB(0, 0, 0));
+        g.beginFill(Graphics.getRGB(255, 255, 255));
         g.drawRect(0, 0, gridSize, gridSize);
         return new Shape(g);
     }
