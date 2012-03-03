@@ -43,7 +43,9 @@ object AvsBGameStats extends LiftActor with ListenerManager {
 
   def getMaxConnectedUsers = maxConnectedUsers
 
-  Schedule.schedule(this, UpdateListeners(), 30 seconds)
+  private val UPDATE_FREQUENCY = 10 seconds
+
+  Schedule.schedule(this, UpdateListeners(), UPDATE_FREQUENCY)
 
   override protected def createUpdate: Any = Stats(totalScore, sideAScore, sideAScore, connectedUsers, maxConnectedUsers)
 
@@ -62,7 +64,7 @@ object AvsBGameStats extends LiftActor with ListenerManager {
     }
     case UpdateListeners() => {
       updateListeners(Stats(totalScore, sideAScore, sideAScore, connectedUsers, maxConnectedUsers))
-      Schedule.schedule(this, UpdateListeners(), 30 seconds)
+      Schedule.schedule(this, UpdateListeners(), UPDATE_FREQUENCY)
     }
   }
 
