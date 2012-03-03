@@ -138,6 +138,21 @@ var AvsBGame = function(spriteSheetURL, spriteSheetWidth, spriteSheetHeight, dat
         }
     }
 
+    function autoClick() {
+
+        if (playerSide != NO_SIDE) {
+            for (var i = 0; i < cells.length; i++) {
+                var cell = cells[i];
+                if (data[i] !== playerSide && cell.isEnabled()) {
+                    cell.disable();
+                    cellClickHandler(i, playerSide);
+                    break;
+                }
+            }
+
+        }
+    }
+
     function updateCellsAlpha() {
         var cellCount = cells.length;
         for (var i = 0; i < cellCount; i++) {
@@ -184,6 +199,8 @@ var AvsBGame = function(spriteSheetURL, spriteSheetWidth, spriteSheetHeight, dat
 
     this.tick = function() {
         stage.update();
+
+        //autoClick();
     };
 
 
