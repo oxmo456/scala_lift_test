@@ -6,7 +6,7 @@ import eu.badmood.avsbgame.AvsBGame
 import net.liftweb.http.DispatchSnippet
 
 
-class InitJsGameEngine extends DispatchSnippet {
+object InitJsGameEngine extends DispatchSnippet {
 
   def dispatch = {
     case "render" => render
