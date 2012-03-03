@@ -3,12 +3,16 @@ package eu.badmood.snippet
 import net.liftweb.util.Helpers._
 import net.liftweb.http.js.JsCmds._
 import net.liftweb.http.js.JE._
-import net.liftweb.http.{SHtml}
 import eu.badmood.LiftUtils._
 import eu.badmood.avsbgame.AvsBGame._
 import Js._
+import net.liftweb.http.{DispatchSnippet, SHtml}
 
-class ChooseYourSide {
+class ChooseYourSide extends DispatchSnippet{
+
+  def dispatch = {
+    case "render" => render
+  }
 
   private def  buttonClickResponse(side:Side) = {
 
