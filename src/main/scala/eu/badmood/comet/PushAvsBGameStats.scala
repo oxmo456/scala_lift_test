@@ -11,17 +11,15 @@ class PushAvsBGameStats extends CometActor with CometListener {
   def registerWith = AvsBGameStats
 
   def render = {
-    println("RENDER !")
-    val pending = "..."
-    "#totalScore *" #> Text(pending) &
-      "#sideAScore *" #> Text(pending) &
-      "#sideBScore *" #> Text(pending) &
-      "#connectedUsers *" #> Text(pending) &
-      "#maxConnectedUsers *" #> Text(pending)
+    "#totalScore *" #> Text(AvsBGameStats.getTotalScore.toString) &
+      "#sideAScore *" #> Text(AvsBGameStats.getSideAScore.toString) &
+      "#sideBScore *" #> Text(AvsBGameStats.getSideBScore.toString) &
+      "#connectedUsers *" #> Text(AvsBGameStats.getConnectedUsers.toString) &
+      "#maxConnectedUsers *" #> Text(AvsBGameStats.getMaxConnectedUsers.toString)
   }
 
   override def lowPriority = {
-    case Stats(totalScrore, sideAScore,sideBScore,connectedUsers,maxConnectedUsers) => {
+    case Stats(totalScrore, sideAScore, sideBScore, connectedUsers, maxConnectedUsers) => {
       partialUpdate {
         SetHtml("#totalScore", Text(totalScrore.toString)) &
           SetHtml("#sideAScore", Text(sideBScore.toString)) &
@@ -30,6 +28,6 @@ class PushAvsBGameStats extends CometActor with CometListener {
           SetHtml("#maxConnectedUsers", Text(maxConnectedUsers.toString))
       }
     }
-    case () => println("INIT !")//listener init
+    case () => println("INIT !") //listener init
   }
 }
